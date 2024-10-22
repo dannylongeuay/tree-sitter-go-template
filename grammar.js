@@ -47,6 +47,12 @@ const
 
 module.exports = grammar({
   name: 'gotmpl',
+  conflicts: $ => [
+      // conflict between a template in an else if clause and the beginning of the
+      // else clause in not solveable with LR(1)
+      [$._else_clause],
+      [$._else_if_clause],
+  ],
   rules: {
     source_file: $ => repeat($._defintion),
 
@@ -97,22 +103,27 @@ module.exports = grammar({
         $._right_delimiter,
 
         field('consequence', repeat($._block)),
+        repeat($._else_if_clause),
+        optional($._else_clause),
+        prec.right(0, $._if_actions_end)
+    ),
 
-        repeat(prec.left(seq(
-            $._left_delimiter,
-            'else if',
-            field('condition', $._pipeline),
-            $._right_delimiter,
-            field('option', repeat($._block)),
-        ))),
+    _else_if_clause: $ => prec.dynamic(2, seq(
+        $._left_delimiter,
+        'else if',
+        field('condition', $._pipeline),
+        $._right_delimiter,
+        field('option', repeat($._block)),
+    )),
 
-        optional(seq(
-            $._left_delimiter,
-            'else',
-            $._right_delimiter,
-            field('alternative', repeat($._block)),
-        )),
+    _else_clause: $ => prec.dynamic(1, seq(
+        $._left_delimiter,
+        'else',
+        $._right_delimiter,
+        (field('alternative', repeat($._block))),
+    )),
 
+    _if_actions_end: $ => seq(
         $._left_delimiter,
         'end',
         $._right_delimiter,

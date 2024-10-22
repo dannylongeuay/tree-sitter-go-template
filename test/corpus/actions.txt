@@ -51,6 +51,20 @@ if else
             (text))))
 
 =============================================
+if else with text and template in if
+=============================================
+{{if pipeline}} t1 {{ pipeline }} {{ else }} t2 {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (text))))
+
+=============================================
 if-else
 =============================================
 {{if pipeline}} t1 {{ else if pipeline }} t2 {{ end }}
@@ -58,6 +72,21 @@ if-else
 (source_file
     (template
         (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text))))
+
+=============================================
+if-else with text and template in if
+=============================================
+{{if pipeline}} t1 {{ pipeline }} {{ else if pipeline }} t2 {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
             (function_call (identifier))
             (text)
             (function_call (identifier))
@@ -76,6 +105,105 @@ if-else else
             (function_call (identifier))
             (text)
             (text))))
+
+=============================================
+if-else else with template and text in else
+=============================================
+{{if pipeline}} t1 {{ else if pipeline }} t2 {{ else }} {{ .Values.test }} test {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+            (text))))
+
+=============================================
+if-else else with text and template in else
+=============================================
+{{if pipeline}} t1 {{ else if pipeline }} t2 {{ else }} test {{ .Values.test }} {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+              (text))))
+
+=============================================
+if-else else with text and template in if-else
+=============================================
+{{if pipeline}} t1 {{ else if pipeline }} test {{ .Values.test }} {{ else }} t3 {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+            (text)
+            (text))))
+
+=============================================
+if-else else with text and template in else and text and template in if-else
+=============================================
+{{if pipeline}} t1 {{ else if pipeline }} test {{ .Values.test }} {{ else }} t3 {{ .Values.test }} {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+            (text)
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+              (text))))
+
+=============================================
+if-else with text and template in if-else
+=============================================
+{{if pipeline}} t1 {{ else if pipeline }} test {{ .Values.test }} {{ end }}
+---
+(source_file
+    (template
+        (if_action
+            (function_call (identifier))
+            (text)
+            (function_call (identifier))
+            (text)
+            (selector_expression
+              (field
+                (identifier))
+              (field_identifier))
+              (text))))
 
 =============================================
 range
